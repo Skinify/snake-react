@@ -4,6 +4,10 @@ import mov from './config/mov'
 const App = () => {
 
   const [posicao, setPosicao] = useState();
+  const [posicaoAtual, setPosicaoAtual] = useState({
+    X:0,
+    Y:0,
+  })
   const [direcao, setDirecao] = useState();
 
   useEffect(()=>{
@@ -29,9 +33,20 @@ const App = () => {
     }
   }
 
+  setInterval(() => {
+    andar();
+  }, 2000);
+  
+  const andar = () => {
+    setPosicaoAtual({
+      X:posicaoAtual.X + 20,
+      Y:posicaoAtual.Y + 20
+    })
+  }
+
   return (
     <div className="App">
-      <a>{direcao}</a>
+      <a className="player" style={{position:"absolute",top:`${posicaoAtual.Y}px`,left:`${posicaoAtual.X}px`}}>x</a>
     </div>
   );
 }
