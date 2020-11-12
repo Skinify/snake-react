@@ -3,7 +3,7 @@ import mov from './config/mov'
 import mapa from './config/mapa'
 
 const App = () => {
-
+  const [tempo, setTempo] = useState(0);
   const [posicao, setPosicao] = useState();
   const [posicaoAtual, setPosicaoAtual] = useState({
     X:0,
@@ -13,7 +13,13 @@ const App = () => {
 
   useEffect(()=>{
     document.querySelector("body").addEventListener("keyup", toggleCommand);
+    const temporizador = setInterval(() => {
+      setTempo(tempo => tempo + 1)
+      andar();
+    }, 1000);
+    return () => clearInterval(temporizador);
   }, [])
+
 
   const toggleCommand = (e) =>{
     atualizarDirecao(e.keyCode)
@@ -33,14 +39,8 @@ const App = () => {
       setDirecao(mov.DIREITA.VALOR);
     }
   }
-
-  const tempo = setInterval(() => {
-    console.log("instanciou timeout")
-    andar();
-  }, 2000);
   
   const andar = () => {
-    console.log(direcao)
     let novaPosicaoAtual = {...posicaoAtual};
 
     if(direcao === mov.CIMA.VALOR){
@@ -58,8 +58,6 @@ const App = () => {
     if(direcao === mov.DIREITA.VALOR){
       novaPosicaoAtual.X = novaPosicaoAtual.X + mapa.TAMANHO_BLOCO 
     }
-
-    clearInterval(tempo);
     setPosicaoAtual(novaPosicaoAtual)
   }
 
