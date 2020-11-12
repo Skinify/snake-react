@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import mov from './config/mov'
+import mapa from './config/mapa'
 
 const App = () => {
 
@@ -8,7 +9,7 @@ const App = () => {
     X:0,
     Y:0,
   })
-  const [direcao, setDirecao] = useState();
+  const [direcao, setDirecao] = useState(mov.DIREITA.VALOR);
 
   useEffect(()=>{
     document.querySelector("body").addEventListener("keyup", toggleCommand);
@@ -33,15 +34,33 @@ const App = () => {
     }
   }
 
-  setInterval(() => {
+  const tempo = setInterval(() => {
+    console.log("instanciou timeout")
     andar();
   }, 2000);
   
   const andar = () => {
-    setPosicaoAtual({
-      X:posicaoAtual.X + 20,
-      Y:posicaoAtual.Y + 20
-    })
+    console.log(direcao)
+    let novaPosicaoAtual = {...posicaoAtual};
+
+    if(direcao === mov.CIMA.VALOR){
+      novaPosicaoAtual.Y = novaPosicaoAtual.Y + mapa.TAMANHO_BLOCO 
+    }
+
+    if(direcao === mov.BAIXO.VALOR){
+      novaPosicaoAtual.Y = novaPosicaoAtual.Y - mapa.TAMANHO_BLOCO 
+    }
+
+    if(direcao === mov.ESQUERDA.VALOR){
+      novaPosicaoAtual.X = novaPosicaoAtual.X - mapa.TAMANHO_BLOCO 
+    }
+
+    if(direcao === mov.DIREITA.VALOR){
+      novaPosicaoAtual.X = novaPosicaoAtual.X + mapa.TAMANHO_BLOCO 
+    }
+
+    clearInterval(tempo);
+    setPosicaoAtual(novaPosicaoAtual)
   }
 
   return (
