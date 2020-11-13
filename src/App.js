@@ -11,14 +11,19 @@ const App = () => {
   })
   const [direcao, setDirecao] = useState(mov.DIREITA.VALOR);
 
+  const body = document.querySelector("body");
+
   useEffect(()=>{
-    document.querySelector("body").addEventListener("keyup", toggleCommand);
+    body.addEventListener("keyup", toggleCommand);
     const temporizador = setInterval(() => {
       setTempo(tempo => tempo + 1)
       andar();
-    }, 1000);
-    return () => clearInterval(temporizador);
-  }, [])
+    }, 250);
+    return () => {
+      clearInterval(temporizador)
+      body.removeEventListener("keyup", toggleCommand);
+    };
+  }, [posicaoAtual])
 
 
   const toggleCommand = (e) =>{
@@ -44,11 +49,11 @@ const App = () => {
     let novaPosicaoAtual = {...posicaoAtual};
 
     if(direcao === mov.CIMA.VALOR){
-      novaPosicaoAtual.Y = novaPosicaoAtual.Y + mapa.TAMANHO_BLOCO 
+      novaPosicaoAtual.Y = novaPosicaoAtual.Y - mapa.TAMANHO_BLOCO 
     }
 
     if(direcao === mov.BAIXO.VALOR){
-      novaPosicaoAtual.Y = novaPosicaoAtual.Y - mapa.TAMANHO_BLOCO 
+      novaPosicaoAtual.Y = novaPosicaoAtual.Y + mapa.TAMANHO_BLOCO 
     }
 
     if(direcao === mov.ESQUERDA.VALOR){
@@ -56,7 +61,7 @@ const App = () => {
     }
 
     if(direcao === mov.DIREITA.VALOR){
-      novaPosicaoAtual.X = novaPosicaoAtual.X + mapa.TAMANHO_BLOCO 
+      novaPosicaoAtual.X = novaPosicaoAtual.X + mapa.TAMANHO_BLOCO
     }
     setPosicaoAtual(novaPosicaoAtual)
   }
