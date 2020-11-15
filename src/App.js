@@ -5,7 +5,7 @@ import inteiroAleatorio from '../src/helper/inteiroAleatorio'
 
 const App = () => {
   const [tempo, setTempo] = useState(0);
-  const [posicao, setPosicao] = useState();
+  const [posicao, setPosicao] = useState([]);
   const [posicaoAtual, setPosicaoAtual] = useState({
     X:0,
     Y:0,
@@ -21,17 +21,17 @@ const App = () => {
 
   useEffect(()=>{
     body.addEventListener("keyup", toggleCommand);
-    verificarColisao();
     const temporizador = setInterval(() => {
       setTempo(tempo => tempo + 1)
       andar();
-    }, 100);
+      moverRabo();
+    }, 300);
+    verificarColisao();
     return () => {
       clearInterval(temporizador)
       body.removeEventListener("keyup", toggleCommand);
     };
-  }, [posicaoAtual])
-
+  }, [posicaoAtual,posicao])
 
   const toggleCommand = (e) =>{
     atualizarDirecao(e.keyCode)
@@ -40,10 +40,19 @@ const App = () => {
   const verificarColisao = () =>{
     if(posicaoAtual.X === comida.X){
       if(posicaoAtual.Y === comida.Y){
-        console.log("eae")
+        comer();
         gerarComida();
       }
     }
+  }
+
+  const comer = () =>{
+    let novaPos = [...posicao]
+    novaPos.push({
+      X:posicaoAtual.X, 
+      Y: posicaoAtual.Y
+    })
+    setPosicao(novaPos)
   }
 
   const gerarComida = () => {
@@ -51,10 +60,8 @@ const App = () => {
     do{
       x = inteiroAleatorio(0,10) * 10
       y = inteiroAleatorio(0,10) * 10
-      if(posicaoAtual.X !== x){
-        if(posicaoAtual.Y !== y){
-          break; 
-        }
+      if((posicaoAtual.X !== x) || (posicaoAtual.Y !== y)){
+        break;
       }
     }while(true)
     setComida({
@@ -80,7 +87,6 @@ const App = () => {
   
   const andar = () => {
     let novaPosicaoAtual = {...posicaoAtual};
-
     if(direcao === mov.CIMA.VALOR){
       novaPosicaoAtual.Y = novaPosicaoAtual.Y - mapa.TAMANHO_BLOCO 
     }
@@ -96,13 +102,40 @@ const App = () => {
     if(direcao === mov.DIREITA.VALOR){
       novaPosicaoAtual.X = novaPosicaoAtual.X + mapa.TAMANHO_BLOCO
     }
+    //moverRabo();
     setPosicaoAtual(novaPosicaoAtual)
+  }
+
+  const moverRabo = () => {
+    if(posicao.length > 0){ 
+      let novaPos = [];
+      var cont = posicao.length;  
+      while(true){
+        if(cont == 1){
+          novaPos[0] = {
+            X: posicaoAtual.X,
+            Y: posicaoAtual.Y
+          }
+          break;
+        }else{
+          novaPos[cont - 1] = {
+            X: posicao[cont - 2].X,
+            Y: posicao[cont - 2].Y
+          }
+        }
+        cont--;
+      }
+      setPosicao(novaPos)
+    }
   }
 
   return (
     <div className="App">
       <a className="player" style={{position:"absolute",top:`${posicaoAtual.Y}px`,left:`${posicaoAtual.X}px`}}>X</a>
-        <a style={{position:"absolute",top:`${comida.Y}px`,left:`${comida.X}px`}}>B</a>
+      {posicao.map(e => {
+        return(<a style={{position:"absolute",top:`${e.Y}px`,left:`${e.X}px`}}>X</a>)
+      })}
+      <a style={{position:"absolute",top:`${comida.Y}px`,left:`${comida.X}px`}}>B</a>
     </div>
   );
 }
