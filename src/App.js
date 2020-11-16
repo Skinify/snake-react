@@ -44,6 +44,12 @@ const App = () => {
         gerarComida();
       }
     }
+
+    posicao.forEach(pos => {
+      if(pos.X == posicaoAtual.X && pos.Y == posicaoAtual.Y){
+        
+      }
+    })
   }
 
   const comer = () =>{
