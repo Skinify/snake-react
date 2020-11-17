@@ -1,0 +1,25 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    box-shadow: none;
+    transition: all .2s ease;
+}
+
+html,body{
+    height: 100vh;
+}
+
+.App{
+    height: 100vh;
+    display: flex;
+}
+
+.mapa{
+    position: relative;
+    --tamanhoMapa: 500px;
+    width: var(--tamanhoMapa);
+    height: var(--tamanhoMapa);
+    background-color: red;
+    margin: auto;
+}

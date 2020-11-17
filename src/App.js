@@ -25,7 +25,7 @@ const App = () => {
       setTempo(tempo => tempo + 1)
       andar();
       moverRabo();
-    }, 300);
+    }, 150);
     verificarColisao();
     return () => {
       clearInterval(temporizador)
@@ -45,8 +45,16 @@ const App = () => {
       }
     }
 
+    if(posicaoAtual.X == mapa.LARGURA || posicaoAtual.Y == mapa.ALTURA){
+      console.log("morto")  
+    }
+
+    if(posicaoAtual.X < 0 || posicaoAtual.Y < 0){
+      console.log("morto")  
+    }
+
     posicao.forEach(pos => {
-      if(pos.X == posicaoAtual.X && pos.Y == posicaoAtual.Y){
+      if(pos.X === posicaoAtual.X && pos.Y === posicaoAtual.Y){
         
       }
     })
@@ -54,10 +62,18 @@ const App = () => {
 
   const comer = () =>{
     let novaPos = [...posicao]
-    novaPos.push({
-      X:posicaoAtual.X, 
-      Y: posicaoAtual.Y
-    })
+    if(posicao.length > 0){
+      novaPos.push({
+        X:posicao[posicao.length - 1].X, 
+        Y: posicao[posicao.length - 1].Y, 
+      })
+    }else{
+      novaPos.push({
+        X:posicaoAtual.X, 
+        Y: posicaoAtual.Y
+      })
+    }
+
     setPosicao(novaPos)
   }
 
@@ -108,7 +124,6 @@ const App = () => {
     if(direcao === mov.DIREITA.VALOR){
       novaPosicaoAtual.X = novaPosicaoAtual.X + mapa.TAMANHO_BLOCO
     }
-    //moverRabo();
     setPosicaoAtual(novaPosicaoAtual)
   }
 
@@ -137,11 +152,13 @@ const App = () => {
 
   return (
     <div className="App">
-      <a className="player" style={{position:"absolute",top:`${posicaoAtual.Y}px`,left:`${posicaoAtual.X}px`}}>X</a>
-      {posicao.map(e => {
-        return(<a style={{position:"absolute",top:`${e.Y}px`,left:`${e.X}px`}}>X</a>)
-      })}
-      <a style={{position:"absolute",top:`${comida.Y}px`,left:`${comida.X}px`}}>B</a>
+      <div className="mapa">
+        <a className="player" style={{position:"absolute",top:`${posicaoAtual.Y}px`,left:`${posicaoAtual.X}px`}}>X</a>
+        {posicao.map(e => {
+          return(<a style={{position:"absolute",top:`${e.Y}px`,left:`${e.X}px`}}>X</a>)
+        })}
+        <a style={{position:"absolute",top:`${comida.Y}px`,left:`${comida.X}px`}}>B</a>
+      </div>
     </div>
   );
 }
