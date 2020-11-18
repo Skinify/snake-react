@@ -14,8 +14,8 @@ const App = () => {
   const [direcao, setDirecao] = useState(mov.DIREITA.VALOR);
 
   const [comida,setComida] = useState({
-    X:mapa.ALTURA/2,
-    Y:mapa.LARGURA/2
+    X: inteiroAleatorio(0,(mapa.LARGURA / 10)) * 10,
+    Y: inteiroAleatorio(0,(mapa.ALTURA/ 10)) * 10
   });
 
   const body = document.querySelector("body");
@@ -71,27 +71,32 @@ const App = () => {
   }
 
   const comer = () =>{
-    let novaPos = [...posicao]
-    if(posicao.length > 0){
-      novaPos.push({
-        X:posicao[posicao.length - 1].X, 
-        Y: posicao[posicao.length - 1].Y, 
-      })
-    }else{
-      novaPos.push({
-        X:posicaoAtual.X, 
-        Y: posicaoAtual.Y
-      })
+    let novaPosi = posicao.length > 0 ? {...posicao[posicao.length - 1]} : {...posicaoAtual}
+    
+    if(direcao === mov.CIMA.VALOR){
+      novaPosi.Y += mapa.TAMANHO_BLOCO
     }
 
-    setPosicao(novaPos)
+    if(direcao === mov.BAIXO.VALOR){
+      novaPosi.Y -= mapa.TAMANHO_BLOCO
+    }
+
+    if(direcao === mov.ESQUERDA.VALOR){
+      novaPosi.X += mapa.TAMANHO_BLOCO
+    }
+
+    if(direcao === mov.DIREITA.VALOR){
+      novaPosi.X -= mapa.TAMANHO_BLOCO
+    }
+
+    setPosicao([...posicao, novaPosi])
   }
 
   const gerarComida = () => {
       let x = 0,y = 0;
     do{
-      x = inteiroAleatorio(0,10) * 10
-      y = inteiroAleatorio(0,10) * 10
+      x = inteiroAleatorio(0,(mapa.LARGURA / 10)) * 10
+      y = inteiroAleatorio(0,(mapa.ALTURA/ 10)) * 10
       if((posicaoAtual.X !== x) || (posicaoAtual.Y !== y)){
         break;
       }
