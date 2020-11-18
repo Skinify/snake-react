@@ -6,6 +6,7 @@ import inteiroAleatorio from '../src/helper/inteiroAleatorio'
 const App = () => {
   const [tempo, setTempo] = useState(0);
   const [posicao, setPosicao] = useState([]);
+  const [continuar, setContinuar] = useState(true)
   const [posicaoAtual, setPosicaoAtual] = useState({
     X:0,
     Y:0,
@@ -13,28 +14,35 @@ const App = () => {
   const [direcao, setDirecao] = useState(mov.DIREITA.VALOR);
 
   const [comida,setComida] = useState({
-    X:50,
-    Y:120,
+    X:mapa.ALTURA/2,
+    Y:mapa.LARGURA/2
   });
 
   const body = document.querySelector("body");
 
   useEffect(()=>{
-    body.addEventListener("keyup", toggleCommand);
-    const temporizador = setInterval(() => {
-      setTempo(tempo => tempo + 1)
-      andar();
-      moverRabo();
-    }, 150);
-    verificarColisao();
-    return () => {
-      clearInterval(temporizador)
-      body.removeEventListener("keyup", toggleCommand);
-    };
+    if(continuar){
+      body.addEventListener("keyup", toggleCommand);
+      const temporizador = setInterval(() => {
+        setTempo(tempo => tempo + 1)
+        andar();
+        moverRabo();
+      }, 150);
+      verificarColisao();
+      return () => {
+        clearInterval(temporizador)
+        body.removeEventListener("keyup", toggleCommand);
+      };
+    }
   }, [posicaoAtual,posicao])
 
   const toggleCommand = (e) =>{
     atualizarDirecao(e.keyCode)
+  }
+
+  const finalizarJogo = () =>{
+    alert("Voce perdeu")
+    setContinuar(false)
   }
 
   const verificarColisao = () =>{
@@ -45,17 +53,19 @@ const App = () => {
       }
     }
 
+    console.log(mapa.LARGURA)
+
     if(posicaoAtual.X == mapa.LARGURA || posicaoAtual.Y == mapa.ALTURA){
-      console.log("morto")  
+      finalizarJogo()
     }
 
     if(posicaoAtual.X < 0 || posicaoAtual.Y < 0){
-      console.log("morto")  
+      finalizarJogo() 
     }
 
     posicao.forEach(pos => {
       if(pos.X === posicaoAtual.X && pos.Y === posicaoAtual.Y){
-        
+        finalizarJogo()
       }
     })
   }
@@ -152,7 +162,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="mapa">
+      <div className="mapa" style={{height:`${mapa.ALTURA}px`,width:`${mapa.LARGURA}px`}}>
         <a className="player" style={{position:"absolute",top:`${posicaoAtual.Y}px`,left:`${posicaoAtual.X}px`}}>X</a>
         {posicao.map(e => {
           return(<a style={{position:"absolute",top:`${e.Y}px`,left:`${e.X}px`}}>X</a>)
