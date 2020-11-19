@@ -4,6 +4,7 @@
     box-sizing: border-box;
     box-shadow: none;
     transition: all .2s ease;
+    font-family: 'Roboto';
 }
 
 html,body{
@@ -12,13 +13,45 @@ html,body{
 
 .App{
     height: 100vh;
-    display: flex;
 }
 
 .mapa{
     position: relative;
     background-color: #83bd57;
-    margin: auto;
     box-shadow: inset 0px 0px 4px 1px,
         0px 0px 0px 10px #714b2b;
+    margin: 12px 0;
+}
+
+.y-center{
+    align-items: center;
+}
+
+.x-center{
+    justify-content: center;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+}
+
+.row{
+    display:flex;
+    flex-direction: row;
+}
+
+.space-between{
+    justify-content: space-between;
+}
+
+#placar > *{
+ padding:0 24px;
+}
+
+#titulo{
+    font-size:50px;
+    padding:70px 0;
+    color:#272727;
+    letter-spacing: 2px;
 }

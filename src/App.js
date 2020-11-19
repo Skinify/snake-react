@@ -166,13 +166,18 @@ const App = () => {
   }
 
   return (
-    <div className="App">
+    <div className="App column y-center">
+      <h1 id="titulo">JOGO DA COBRA REACT</h1>
       <div className="mapa" style={{height:`${mapa.ALTURA}px`,width:`${mapa.LARGURA}px`}}>
         <a className="player" style={{position:"absolute",top:`${posicaoAtual.Y}px`,left:`${posicaoAtual.X}px`}}>X</a>
         {posicao.map(e => {
           return(<a style={{position:"absolute",top:`${e.Y}px`,left:`${e.X}px`}}>X</a>)
         })}
         <a style={{position:"absolute",top:`${comida.Y}px`,left:`${comida.X}px`}}>B</a>
+      </div>
+      <div className="row space-between" id="placar">
+        <a>Tempo: {tempo}</a>
+        <a>Frutas: {posicao.length}</a>
       </div>
     </div>
   );
